@@ -1,6 +1,9 @@
 import 'package:bwa_cozy/models/city.dart';
+import 'package:bwa_cozy/models/space.dart';
+import 'package:bwa_cozy/models/tips.dart';
 import 'package:bwa_cozy/widgets/city_card.dart';
 import 'package:bwa_cozy/widgets/space_card.dart';
+import 'package:bwa_cozy/widgets/tips_card.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -99,14 +102,79 @@ class HomePage extends StatelessWidget {
                   SizedBox(height: 16,),
                   Column(
                     children: [
-                      SpaceCard(),
+                      SpaceCard(
+                        space: Space(
+                          id: 1,
+                          imageUrl: "assets/space1.png",
+                          rating: 4,
+                          location: "Bandung, Germany",
+                          price: 52,
+                          spaceName: "Kuratakeso Hott"
+                        ),
+                      ),
                       SizedBox(height: 30,),
-                      SpaceCard(),
+                      SpaceCard(
+                        space: Space(
+                          id: 2,
+                          imageUrl: "assets/space2.png",
+                          rating: 5,
+                          location: "Seattle, Bogor",
+                          price: 11,
+                          spaceName: "Roemah Nenek"
+                        ),
+                      ),
+                      SizedBox(height: 30,),
+                      SpaceCard(
+                        space: Space(
+                          id: 3,
+                          imageUrl: "assets/space3.png",
+                          rating: 3,
+                          location: "Jakarta, Indonesia",
+                          price: 20,
+                          spaceName: "Darrling How"
+                        ),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
+            // NOTE: TIPS & GUIDANCE
+            Padding(
+              padding: EdgeInsets.only(left: 24, top: 30, right: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Tips & Guidance",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    )
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TipsCard(
+                    tips: Tips(
+                      title: 'City Guidelines',
+                      lastUpdatedDay: 20,
+                      lastUpdatedMonth: 'Apr', 
+                      imageUrl: 'assets/cityguide.png')
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TipsCard(
+                    tips: Tips(
+                      title: 'Jakarta Fairship',
+                      lastUpdatedDay: 11,
+                      lastUpdatedMonth: 'Dec', 
+                      imageUrl: 'assets/jakartafair.png')
+                  ),
+                ]
+              )
+            ), 
           ],
         ),
       ),

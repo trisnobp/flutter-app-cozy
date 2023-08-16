@@ -1,8 +1,11 @@
+import 'package:bwa_cozy/models/space.dart';
 import 'package:bwa_cozy/theme.dart';
 import 'package:flutter/material.dart';
 
 class SpaceCard extends StatelessWidget {
-  const SpaceCard({Key? key}) : super(key: key);
+  const SpaceCard({Key? key, required this.space}) : super(key: key);
+
+  final Space space;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class SpaceCard extends StatelessWidget {
             child: Stack(
               children: [
                 Image.asset(
-                  'assets/space1.png',
+                  space.imageUrl,
                   width: 130,
                   height: 110,
                 ),
@@ -27,9 +30,8 @@ class SpaceCard extends StatelessWidget {
                     height: 30,
                     decoration: BoxDecoration(
                       color: purple,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(36)
-                      ),
+                      borderRadius:
+                          BorderRadius.only(bottomLeft: Radius.circular(36)),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -40,7 +42,7 @@ class SpaceCard extends StatelessWidget {
                           height: 18,
                         ),
                         Text(
-                          "4/5",
+                          "${space.rating}/5",
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
@@ -52,33 +54,52 @@ class SpaceCard extends StatelessWidget {
                   ),
                 ),
               ],
-            ),   
+            ),
           ),
         ),
-        SizedBox(width: 20,),
+        SizedBox(
+          width: 20,
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Kuretakeso Hott",
+              space.spaceName,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 18,
               ),
             ),
-            SizedBox(height: 2,),
-            Text.rich(
-              TextSpan(
-                text: "\$52",
-                style: TextStyle(
-                  color: purple,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                ),
-                children: [
-                  
-                ],
-              )
+            SizedBox(
+              height: 2,
+            ),
+            Text.rich(TextSpan(
+              text: "\$${space.price}",
+              style: TextStyle(
+                color: purple,
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+              children: [
+                TextSpan(
+                    text: " / month",
+                    style: TextStyle(
+                      color: grey,
+                      fontWeight: FontWeight.w300,
+                      fontSize: 16,
+                    )),
+              ],
+            )),
+            SizedBox(
+              height: 16,
+            ),
+            Text(
+              space.location,
+              style: TextStyle(
+                color: grey,
+                fontWeight: FontWeight.w300,
+                fontSize: 14,
+              ),
             ),
           ],
         ),
