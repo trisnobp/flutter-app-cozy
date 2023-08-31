@@ -81,6 +81,11 @@ flutter:
     - assets/space1.png
     - assets/space2.png
     - assets/space3.png
+    - assets/card.png
+    - assets/home.png
+    - assets/love.png
+    - assets/mail.png
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
