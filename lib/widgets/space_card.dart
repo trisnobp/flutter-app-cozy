@@ -25,10 +25,11 @@ class SpaceCard extends StatelessWidget {
               height: 110,
               child: Stack(
                 children: [
-                  Image.asset(
+                  Image.network(
                     space.imageUrl,
                     width: 130,
                     height: 110,
+                    fit: BoxFit.cover,
                   ),
                   Align(
                     alignment: Alignment.topRight,
@@ -71,7 +72,7 @@ class SpaceCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                space.spaceName,
+                space.name,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
@@ -101,7 +102,7 @@ class SpaceCard extends StatelessWidget {
                 height: 16,
               ),
               Text(
-                space.location,
+                '${space.city}, ${space.country}',
                 style: TextStyle(
                   color: grey,
                   fontWeight: FontWeight.w300,

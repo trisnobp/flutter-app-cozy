@@ -1,7 +1,10 @@
+import 'package:bwa_cozy/pages/error_page.dart';
 import 'package:bwa_cozy/widgets/facilities_icon.dart';
+import 'package:bwa_cozy/widgets/rating_item.dart';
 import 'package:flutter/material.dart';
 import 'package:bwa_cozy/theme.dart';
 import 'package:bwa_cozy/models/space.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailsPage extends StatelessWidget {
   const DetailsPage({super.key, required this.space});
@@ -10,11 +13,26 @@ class DetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Ubah data type objek yang di list of photos jadi String
+
+    launchErrorPage() {
+      Navigator.push(
+          context, MaterialPageRoute(builder: ((context) => ErrorPage())));
+    }
+
+    _launchURL(String url) async {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url));
+      } else {
+        launchErrorPage();
+      }
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
-            Image.asset(
+            Image.network(
               space.imageUrl,
               width: MediaQuery.of(context).size.width,
               height: 350,
@@ -45,7 +63,7 @@ class DetailsPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  space.spaceName,
+                                  space.name,
                                   style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.w500),
@@ -54,59 +72,31 @@ class DetailsPage extends StatelessWidget {
                                   height: 2,
                                 ),
                                 Text.rich(TextSpan(
-                                  text: '\$${space.price}',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: purple
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: ' / month',
-                                      style: TextStyle(
+                                    text: '\$${space.price}',
+                                    style: TextStyle(
                                         fontSize: 16,
-                                        fontWeight: FontWeight.w300,
-                                        color: grey
-                                      )
-                                    )
-                                  ]
-                                ))
+                                        fontWeight: FontWeight.w500,
+                                        color: purple),
+                                    children: [
+                                      TextSpan(
+                                          text: ' / month',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w300,
+                                              color: grey))
+                                    ]))
                               ],
                             ),
                             Row(
-                              children: [
-                                Image.asset(
-                                  'assets/star.png',
-                                  width: 20,
-                                  height: 20,
+                                children: [1, 2, 3, 4, 5].map<Widget>((e) {
+                              return Padding(
+                                padding: EdgeInsets.only(right: e != 5 ? 5 : 0),
+                                child: RatingItem(
+                                  index: e,
+                                  rating: space.rating,
                                 ),
-                                SizedBox(width: 2,),
-                                Image.asset(
-                                  'assets/star.png',
-                                  width: 20,
-                                  height: 20,
-                                ),
-                                SizedBox(width: 2,),
-                                Image.asset(
-                                  'assets/star.png',
-                                  width: 20,
-                                  height: 20,
-                                ),
-                                SizedBox(width: 2,),
-                                Image.asset(
-                                  'assets/star.png',
-                                  width: 20,
-                                  height: 20,
-                                ),
-                                SizedBox(width: 2,),
-                                Image.asset(
-                                  'assets/star.png',
-                                  width: 20,
-                                  height: 20,
-                                  color: grey,
-                                )
-                              ],
-                            )
+                              );
+                            }).toList())
                           ],
                         ),
                       ),
@@ -120,22 +110,29 @@ class DetailsPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Main Facilities',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              )
-                            ),
+                            Text('Main Facilities',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                )),
                             SizedBox(
                               height: 12,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                FacilitiesIcon(name: 'kitchens', amount: 2, image: 'assets/kitchen_logo.png'),
-                                FacilitiesIcon(name: 'bedrooms', amount: 3, image: 'assets/bed_logo.png'),
-                                FacilitiesIcon(name: 'cupboards', amount: 3, image: 'assets/cupboard_logo.png')
+                                FacilitiesIcon(
+                                    name: 'kitchens',
+                                    amount: space.numberOfKitchens,
+                                    image: 'assets/kitchen_logo.png'),
+                                FacilitiesIcon(
+                                    name: 'bedrooms',
+                                    amount: space.numberOfBedrooms,
+                                    image: 'assets/bed_logo.png'),
+                                FacilitiesIcon(
+                                    name: 'cupboards',
+                                    amount: space.numberOfKitchens,
+                                    image: 'assets/cupboard_logo.png')
                               ],
                             )
                           ],
@@ -145,18 +142,14 @@ class DetailsPage extends StatelessWidget {
                         height: 30,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
-                          left: 24
-                        ),
+                        padding: EdgeInsets.only(left: 24),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Photos',
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400
-                              ),
+                                  fontSize: 16, fontWeight: FontWeight.w400),
                             ),
                             SizedBox(
                               height: 12,
@@ -164,33 +157,21 @@ class DetailsPage extends StatelessWidget {
                             Container(
                               height: 88,
                               child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  Image.asset(
-                                    'assets/bed.png',
-                                    width: 110,
-                                    height: 88,
-                                  ),
-                                  SizedBox(width: 18,),
-                                  Image.asset(
-                                    'assets/bath.png',
-                                    width: 110,
-                                    height: 88,
-                                  ),
-                                  SizedBox(width: 18,),
-                                  Image.asset(
-                                    'assets/sofa.png',
-                                    width: 110,
-                                    height: 88,
-                                  ),
-                                  SizedBox(width: 18,),
-                                  Image.asset(
-                                    'assets/bed.png',
-                                    width: 110,
-                                    height: 88,
-                                  ),
-                                ],
-                              ),
+                                  scrollDirection: Axis.horizontal,
+                                  children: space.photos.map<Widget>((e) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 18),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(17),
+                                        child: Image.network(
+                                          e,
+                                          width: 110,
+                                          height: 88,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList()),
                             )
                           ],
                         ),
@@ -199,18 +180,14 @@ class DetailsPage extends StatelessWidget {
                         height: 30,
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 24
-                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 24),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Location',
                               style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16
-                              ),
+                                  fontWeight: FontWeight.w400, fontSize: 16),
                             ),
                             SizedBox(
                               height: 6,
@@ -219,15 +196,17 @@ class DetailsPage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Jln. Kappan Sukses No. 20\nPalembang',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: grey
-                                  ),
+                                  space.address,
+                                  style: TextStyle(fontSize: 14, color: grey),
                                 ),
-                                Image.asset(
-                                  'assets/btn_location.png',
-                                  width: 40,
+                                InkWell(
+                                  onTap: () {
+                                    _launchURL(space.mapUrl);
+                                  },
+                                  child: Image.asset(
+                                    'assets/btn_location.png',
+                                    width: 40,
+                                  ),
                                 )
                               ],
                             ),
@@ -235,26 +214,27 @@ class DetailsPage extends StatelessWidget {
                               height: 40,
                             ),
                             Container(
-                              height: 50,
-                              width: MediaQuery.of(context).size.width - 48,
-                              child: ElevatedButton(
-                                onPressed: (() {
-                                  
-                                }),
-                                style: ButtonStyle(
-                                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(17))),
-                                    backgroundColor: MaterialStateProperty.all(purple),
-                                ),
-                                child: Text(
-                                  'Book Now',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 18
+                                height: 50,
+                                width: MediaQuery.of(context).size.width - 48,
+                                child: ElevatedButton(
+                                  onPressed: (() {
+                                    _launchURL('tel:${space.phone}');
+                                  }),
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(17))),
+                                    backgroundColor:
+                                        MaterialStateProperty.all(purple),
                                   ),
-                                ),
-                              )
-                            ),
+                                  child: Text(
+                                    'Book Now',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18),
+                                  ),
+                                )),
                             SizedBox(
                               height: 30,
                             )
